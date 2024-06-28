@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 ;;; org-table-hline-cell.el --- Library to extend various modes
 
 ;; Copyright (C) 2024
@@ -67,7 +68,7 @@
 
 (defun org-table-hline-cell-post-edit ()
   (interactive)
-  (beginning-of-buffer)
+  (goto-char (point-min))
   (search-forward edit-prompt-delimiter)
   (beginning-of-line)
   (let* ((replacement
@@ -122,7 +123,8 @@
 	 (hdiff (- (length
 		      (plist-get no-trailing-whitespaces :lines))
 		     (length
-		      (plist-get orig-dest :lines)))))
+		      (plist-get orig-dest :lines))))
+	 (new-dest))
 
     (when (> hdiff 0)
       (beginning-of-line)
@@ -144,10 +146,10 @@
     (org-table-align)))
 
 (defun org-table-hline-move-below-hline-or-beginning-of-table ()
-  (if (not (org-table-p))
+  (if (not (org-at-table-p))
       (error "Not a table"))
   (beginning-of-line)
-    (while (and (org-table-p)
+    (while (and (org-at-table-p)
 		(not (org-at-table-hline-p))
 		(not (bobp)))
       (forward-line -1))
@@ -156,11 +158,11 @@
 
 (defun org-table-hline-cell-trim-trailing-blank-rows ()
   (interactive)
-  (while (and (org-table-p)
+  (while (and (org-at-table-p)
 		  (not (org-at-table-hline-p))
 		  (not (eobp)))
     (forward-line 1))
-  (let* ((eot (not (org-table-p))))
+  (let* ((eot (not (org-at-table-p))))
     (forward-line -1)
     (beginning-of-line)
     (while (looking-at-p "^[[:blank:]|]+$")
@@ -170,14 +172,14 @@
       (beginning-of-line))))
 
 (defun org-table-hline-cell-parse-cell ()
-  (if (not (org-table-p))
+  (if (not (org-at-table-p))
       (error "Not a table"))
   (save-excursion
     (let* ((ncol (org-table-current-column))
 	   (lines))
       (org-table-hline-move-below-hline-or-beginning-of-table)
 
-      (while (and (org-table-p)
+      (while (and (org-at-table-p)
 		  (not (org-at-table-hline-p))
 		  (not (eobp)))
 	(org-table-goto-column ncol nil t)
