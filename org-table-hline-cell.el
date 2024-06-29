@@ -175,7 +175,9 @@
 		(not (org-at-table-hline-p))
 		(not (bobp)))
       (forward-line -1))
-    (if (not (bobp))
+    (if (or
+	 (not (org-at-table-p))
+	 (org-at-table-hline-p))
 	(forward-line)))
 
 (defun org-table-hline-cell-trim-trailing-blank-rows ()
