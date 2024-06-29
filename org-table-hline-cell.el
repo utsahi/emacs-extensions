@@ -69,27 +69,49 @@
    (org-table-hline-cell-create-blank-replacement org-table-hline-cell-killed-cell))
   (org-table-align))
 
+(defun org-table-hline-cell-parse-buffer ()
+  (list :lines
+	(cl-loop while (not (eobp))
+		 collect
+		 (prog1
+		     (list :str
+			   (buffer-substring
+			    (line-beginning-position)
+			    (line-end-position)))
+		   (forward-line)))))
+
+(defun org-table-hline-cell-insert-cell-into-buffer (parsed-cell)
+  (cl-loop for l in (plist-get parsed-cell :lines)
+	     do
+	     (insert (plist-get l :str))
+	     (insert "\n")))
+
 (defun org-table-hline-cell-post-edit ()
   (interactive)
   (goto-char (point-min))
   (search-forward edit-prompt-delimiter)
   (beginning-of-line)
-  (let* ((replacement
-	  (list :lines
-		(cl-loop while (not (eobp))
-			 collect
-			 (prog1
-			     (list :str
-				   (buffer-substring
-				    (line-beginning-position)
-				    (line-end-position)))
-			   (forward-line)))))
+  (let* ((replacement (org-table-hline-cell-parse-buffer))
 	 (org-pt pt))
     (with-current-buffer org-buffer
       (let* ((org-table-hline-cell-killed-cell replacement))
 	(goto-char org-pt)
 	(org-table-hline-cell-paste-cell))))
   (kill-buffer))
+
+(defun org-table-hline-cell-fill-cell (n)
+  (interactive "nFill width: ")
+  
+  (let* ((parsed-cell (org-table-hline-cell-parse-cell))
+	 (fill-column n)
+	 (filled-cell
+	  (with-temp-buffer
+	    (org-table-hline-cell-insert-cell-into-buffer parsed-cell)
+	    (fill-region (point-min) (point-max))
+	    (goto-char (point-min))
+	    (org-table-hline-cell-parse-buffer))))
+    (let* ((org-table-hline-cell-killed-cell filled-cell))
+      (org-table-hline-cell-paste-cell))))
 
 (defun org-table-hline-cell-edit-cell ()
   (interactive)
@@ -103,10 +125,7 @@
     (setq-local pt parent-pt)
     (erase-buffer)
     (insert edit-prompt-delimiter)
-    (cl-loop for l in (plist-get parsed-cell :lines)
-	     do
-	     (insert (plist-get l :str))
-	     (insert "\n"))
+    (org-table-hline-cell-insert-cell-into-buffer parsed-cell)
     (local-set-key (kbd "C-c C-c") 'org-table-hline-cell-post-edit)
     (message "Edit and finish with C-c C-c")))
 
