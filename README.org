@@ -6,8 +6,10 @@ This package considers the text in a column that is delimited by
 either a hline or end of the table as a ~cell~. If there is no hline
 in the table, the entire column is considered to be a cell.
 
-Demo 1 - copy, paste, trim
+*Demo 1* - copy, paste, trim
+
 [[file:org-table-hline-cell-demo/CopyPasteTrim.gif]]
 
-Demo 2 - edit cell
+*Demo 2* - edit cell
+
 [[file:org-table-hline-cell-demo/EditField.gif]]
