@@ -5,6 +5,9 @@
 
 ;; Author: Kishor Datar (kishordatar at gmail)
 
+;; Package-Version: 1.0.0
+;; Package-Requires: ((emacs "29.0"))
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -205,3 +208,5 @@
 		 (org-table-get-field ncol (plist-get src :str)))))))
 
 (provide 'org-table-hline-cell)
+
+;;; org-table-hline-cell.el ends here
