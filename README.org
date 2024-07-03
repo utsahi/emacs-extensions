@@ -1,15 +1,20 @@
 ** org-table-hline-cell.el
 
-Allows editing, copying, cutting, deleting and pasting of cells.
+Allows various operations like editing, copying, cutting, deleting and
+pasting, filling of cells.
 
 This package considers the text in a column that is delimited by
 either a hline or end of the table as a ~cell~. If there is no hline
 in the table, the entire column is considered to be a cell.
 
-*Demo 1* - copy, paste, trim
+*Demo 1*
+
+[[file:org-table-hline-cell-demo/FillCell.gif]]
+
+*Demo 2* - copy, paste, trim
 
 [[file:org-table-hline-cell-demo/CopyPasteTrim.gif]]
 
-*Demo 2* - edit cell
+*Demo 3* - edit cell
 
 [[file:org-table-hline-cell-demo/EditField.gif]]
