@@ -1,3 +1,5 @@
+* emacs-extensions
+
 ** org-table-hline-cell.el
 
 Allows various operations like editing, copying, cutting, deleting and
@@ -6,6 +8,17 @@ pasting, filling of cells.
 This package considers the text in a column that is delimited by
 either a hline or end of the table as a ~cell~. If there is no hline
 in the table, the entire column is considered to be a cell.
+
+*** Installation
+
+#+begin_src emacs-lisp
+  (package-vc-install
+   '(org-table-hline-cell :url "https://github.com/utsahi/emacs-extensions/"
+  			:branch "main"
+  			:main-file "org-table-hline-cell"))
+#+end_src
+
+*** Demo
 
 *Demo 1*
 
